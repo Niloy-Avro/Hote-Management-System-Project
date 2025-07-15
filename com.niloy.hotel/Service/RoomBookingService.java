@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class RoomBookingService {
 
-    public ArrayList<RoomBooking> getBookedRooms() {
+    public static ArrayList<RoomBooking> getBookedRooms() {
         ArrayList<RoomBooking> bookedRooms = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT * FROM room WHERE is_booked = TRUE";
@@ -27,7 +27,7 @@ public class RoomBookingService {
         return bookedRooms;
     }
 
-    public ArrayList<RoomBooking> getAvailableRooms() {
+    public static ArrayList<RoomBooking> getAvailableRooms() {
         ArrayList<RoomBooking> availableRooms = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT * FROM room WHERE is_booked = FALSE";
@@ -44,7 +44,7 @@ public class RoomBookingService {
         return availableRooms;
     }
 
-    private RoomBooking extractRoomFromResultSet(ResultSet rs) throws Exception {
+    private static RoomBooking extractRoomFromResultSet(ResultSet rs) throws Exception {
         return new RoomBooking(
                 rs.getInt("id"),
                 rs.getInt("room_number"),
@@ -56,7 +56,7 @@ public class RoomBookingService {
         );
     }
 
-    public boolean bookRoom(int roomNumber, String guestName, String contact, String gender) {
+    public static boolean bookRoom(int roomNumber, String guestName, String contact, String gender) {
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "UPDATE room SET is_booked = TRUE, guest_name = ?, guest_contact = ?, guest_gender = ? WHERE room_number = ? AND is_booked = FALSE";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -74,4 +74,17 @@ public class RoomBookingService {
         return false;
     }
 
+    public static boolean checkoutRoom(int roomNumber){
+        try(Connection conn = DBConnection.getConnection()) {
+            String sql = "UPDATE room SET is_booked = FALSE, guest_name = NULL, guest_contact = NULL, guest_gender = NULL WHERE room_number = ? AND is_booked = TRUE";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, roomNumber);
+            int updated = ps.executeUpdate();
+            return updated > 0;
+        }
+        catch (Exception e) {
+            System.out.println("Checkout Failed: "+ e.getMessage());
+            return false;
+        }
+    }
 }
