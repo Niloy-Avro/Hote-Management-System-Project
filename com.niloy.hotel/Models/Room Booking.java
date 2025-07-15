@@ -43,10 +43,8 @@ public class RoomBooking {
 
 
     public void display() {
-        System.out.println("Room #" + roomNumber + " | " + type + " | " +
+        System.out.println("Room " + roomNumber + " | " + type + " | " +
                 (isBooked ? "Booked" : "Available") +
                 (isBooked ? " | Guest: " + guestName : ""));
     }
 }
-
-
