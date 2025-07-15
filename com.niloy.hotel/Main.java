@@ -27,15 +27,14 @@ public class Main {
             switch(ch) {
                 case 1:
                     System.out.println("Room Booking Selected.");
-                    RoomBookingService roomBookingService = new RoomBookingService();
 
                     System.out.println("Booked Rooms:");
-                    for (RoomBooking room : roomBookingService.getBookedRooms()) {
+                    for (RoomBooking room : RoomBookingService.getBookedRooms()) {
                         room.display();
                     }
 
                     System.out.println("Available Rooms:");
-                    for (RoomBooking room : roomBookingService.getAvailableRooms()) {
+                    for (RoomBooking room : RoomBookingService.getAvailableRooms()) {
                         room.display();
                     }
 
@@ -52,7 +51,7 @@ public class Main {
                     System.out.print("Enter Gender: ");
                     String gender = sc.nextLine();
 
-                    boolean success = roomBookingService.bookRoom(roomNumber, name, contact, gender);
+                    boolean success = RoomBookingService.bookRoom(roomNumber, name, contact, gender);
                     if (success) {
                         System.out.println("✅ Room Booked Successfully!");
                     } else {
@@ -89,6 +88,18 @@ public class Main {
                     break;
                 case 3:
                     System.out.println("Checkout Selected.");
+
+                    System.out.println("Enter Room NUmber to Checkout: ");
+                    int roomNumber_forCheckout = sc.nextInt();
+
+                    boolean success_forCheckout = RoomBookingService.checkoutRoom(roomNumber_forCheckout);
+                    if(success_forCheckout) {
+                        System.out.println("Check Out Successful");
+                    }
+                    else {
+                        System.out.println("Checkout Failed. Room may already be vacent or doesn't exist");
+                    }
+
                     break;
                 case 4:
                     System.out.println("Thank You for visiting");
